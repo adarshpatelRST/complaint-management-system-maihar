@@ -1,0 +1,6 @@
+{
+  "name": "Maihar Complaint Portal",
+  "description": "Citizen grievance redressal portal demo for Maihar Nagar Palika, Madhya Pradesh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
