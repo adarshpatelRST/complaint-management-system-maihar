@@ -23,6 +23,13 @@ import { ServicesHub } from './modules/services/ServicesHub';
 import { TempleView } from './modules/temple/TempleView';
 import { AppProvider, useApp } from './store/AppContext';
 import { CitizenScreen, CitizenTab, PlaceTypeId } from './types';
+import { E_NAGARPALIKA_PORTAL_URL } from './constants';
+import { AppIssuesView } from './modules/app_issues/AppIssuesView';
+import { AboutAppView } from './modules/about_app/AboutAppView';
+import { AchievementsView } from './modules/achievements/AchievementsView';
+import { NewsView } from './modules/news/NewsView';
+import { WaterTankerBookingView } from './modules/bookings/WaterTankerBookingView';
+import { JcbBookingView } from './modules/bookings/JcbBookingView';
 
 type GuestView = 'front' | 'login' | 'register' | FrontPublicScreen;
 
@@ -79,6 +86,8 @@ const CitizenShell: React.FC = () => {
       faq: t.faqTitle,
       terms: t.termsTitle,
       privacy: t.privacyTitle,
+      achievements: t.achievementsTitle,
+      news: t.newsTitle,
     };
 
     return (
@@ -90,6 +99,8 @@ const CitizenShell: React.FC = () => {
           {guestView === 'helplines' && <HelplinesView />}
           {guestView === 'nearby' && <NearbyView initialCategory={nearbyCategory} />}
           {guestView === 'cityinfo' && <CityInfoView />}
+          {guestView === 'achievements' && <AchievementsView />}
+          {guestView === 'news' && <NewsView />}
           {(guestView === 'about' ||
             guestView === 'faq' ||
             guestView === 'terms' ||
@@ -100,6 +111,10 @@ const CitizenShell: React.FC = () => {
   }
 
   const navigate = (target: CitizenScreen) => {
+    if (target === 'bills') {
+      window.location.href = E_NAGARPALIKA_PORTAL_URL;
+      return;
+    }
     setPreviousScreen(screen);
     setScreen(target);
   };
@@ -119,14 +134,14 @@ const CitizenShell: React.FC = () => {
   const activeTab: CitizenTab = TAB_SCREENS.includes(screen as CitizenTab)
     ? (screen as CitizenTab)
     : screen === 'complaints' || screen === 'complaint_detail' || screen === 'notifications'
-    ? 'home'
-    : screen === 'about' || screen === 'faq' || screen === 'terms' || screen === 'privacy'
-    ? previousScreen === 'home'
       ? 'home'
-      : previousScreen === 'services'
-      ? 'services'
-      : 'profile'
-    : 'services';
+      : screen === 'about' || screen === 'faq' || screen === 'terms' || screen === 'privacy'
+        ? previousScreen === 'home'
+          ? 'home'
+          : previousScreen === 'services'
+            ? 'services'
+            : 'profile'
+        : 'services';
 
   const isRootTab = TAB_SCREENS.includes(screen as CitizenTab);
 
@@ -148,6 +163,12 @@ const CitizenShell: React.FC = () => {
     faq: t.faqTitle,
     terms: t.termsTitle,
     privacy: t.privacyTitle,
+    app_issues: t.appIssuesTitle,
+    about_app: t.aboutAppTitle,
+    achievements: t.achievementsTitle,
+    news: t.newsTitle,
+    tanker_booking: t.tankerBookingTitle,
+    jcb_booking: t.jcbBookingTitle,
   };
 
   const handleBack = () => {
@@ -160,8 +181,8 @@ const CitizenShell: React.FC = () => {
         previousScreen === 'home'
           ? 'home'
           : previousScreen === 'services'
-          ? 'services'
-          : 'profile'
+            ? 'services'
+            : 'profile'
       );
       return;
     }
@@ -170,7 +191,13 @@ const CitizenShell: React.FC = () => {
       screen === 'bills' ||
       screen === 'garbage' ||
       screen === 'temple' ||
-      screen === 'cityinfo'
+      screen === 'cityinfo' ||
+      screen === 'app_issues' ||
+      screen === 'about_app' ||
+      screen === 'achievements' ||
+      screen === 'news' ||
+      screen === 'tanker_booking' ||
+      screen === 'jcb_booking'
     ) {
       setScreen(previousScreen === 'home' ? 'home' : 'services');
       return;
@@ -234,6 +261,25 @@ const CitizenShell: React.FC = () => {
           screen === 'faq' ||
           screen === 'terms' ||
           screen === 'privacy') && <InfoPagesView page={screen} />}
+        {screen === 'app_issues' && (
+          <AppIssuesView
+            onCancel={() => navigate('services')}
+            onSuccessViewComplaint={(id) => openComplaint(id)}
+          />
+        )}
+        {screen === 'about_app' && (
+          <AboutAppView
+            onBack={() => navigate('services')}
+            onOpenAppIssues={() => navigate('app_issues')}
+            onOpenFaq={() => navigate('faq')}
+            onOpenTerms={() => navigate('terms')}
+            onOpenPrivacy={() => navigate('privacy')}
+          />
+        )}
+        {screen === 'achievements' && <AchievementsView />}
+        {screen === 'news' && <NewsView />}
+        {screen === 'tanker_booking' && <WaterTankerBookingView onBack={handleBack} />}
+        {screen === 'jcb_booking' && <JcbBookingView onBack={handleBack} />}
       </main>
 
       <BottomNav

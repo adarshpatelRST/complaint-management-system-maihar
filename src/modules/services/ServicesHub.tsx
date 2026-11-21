@@ -4,18 +4,25 @@ import {
   ChevronRight,
   ClipboardList,
   CreditCard,
+  Droplets,
   FileText,
+  HardHat,
   HelpCircle,
   Info,
   Landmark,
+  Newspaper,
   PhoneCall,
   PlusCircle,
   ShieldCheck,
+  Smartphone,
+  Trophy,
   Truck,
+  Wrench,
 } from 'lucide-react';
 import { UI } from '../../theme/tokens';
 import { useApp } from '../../store/AppContext';
 import { CitizenScreen } from '../../types';
+import { E_NAGARPALIKA_PORTAL_URL } from '../../constants';
 
 interface ServicesHubProps {
   onNavigate: (screen: CitizenScreen) => void;
@@ -25,7 +32,8 @@ export const ServicesHub: React.FC<ServicesHubProps> = ({ onNavigate }) => {
   const { t } = useApp();
 
   const items: {
-    screen: CitizenScreen;
+    screen?: CitizenScreen;
+    onClick?: () => void;
     title: string;
     subtitle: string;
     icon: React.ComponentType<{ className?: string }>;
@@ -43,16 +51,30 @@ export const ServicesHub: React.FC<ServicesHubProps> = ({ onNavigate }) => {
       icon: ClipboardList,
     },
     {
-      screen: 'bills',
       title: t.billsTitle,
       subtitle: t.serviceBillsSub,
       icon: CreditCard,
+      onClick: () => {
+        window.location.href = E_NAGARPALIKA_PORTAL_URL;
+      },
     },
     {
       screen: 'garbage',
       title: t.garbageTitle,
       subtitle: t.serviceGarbageSub,
       icon: Truck,
+    },
+    {
+      screen: 'tanker_booking',
+      title: t.tankerBookingTitle,
+      subtitle: t.tankerBookingSub,
+      icon: Droplets,
+    },
+    {
+      screen: 'jcb_booking',
+      title: t.jcbBookingTitle,
+      subtitle: t.jcbBookingSub,
+      icon: HardHat,
     },
     {
       screen: 'temple',
@@ -71,6 +93,30 @@ export const ServicesHub: React.FC<ServicesHubProps> = ({ onNavigate }) => {
       title: t.serviceCityInfo,
       subtitle: t.serviceCityInfoSub,
       icon: Building2,
+    },
+    {
+      screen: 'achievements',
+      title: t.achievementsTitle,
+      subtitle: t.achievementsSub,
+      icon: Trophy,
+    },
+    {
+      screen: 'news',
+      title: t.newsTitle,
+      subtitle: t.newsSub,
+      icon: Newspaper,
+    },
+    {
+      screen: 'app_issues',
+      title: t.appIssuesTitle,
+      subtitle: t.appIssuesSub,
+      icon: Wrench,
+    },
+    {
+      screen: 'about_app',
+      title: t.aboutAppTitle,
+      subtitle: t.aboutAppSub,
+      icon: Smartphone,
     },
   ];
 
@@ -93,9 +139,15 @@ export const ServicesHub: React.FC<ServicesHubProps> = ({ onNavigate }) => {
           const Icon = item.icon;
           return (
             <button
-              key={item.screen}
+              key={item.title}
               type="button"
-              onClick={() => onNavigate(item.screen)}
+              onClick={() => {
+                if (item.onClick) {
+                  item.onClick();
+                } else if (item.screen) {
+                  onNavigate(item.screen);
+                }
+              }}
               className={`${UI.cardInteractive} w-full min-h-[66px] px-4 py-3 flex items-center justify-between gap-3.5 text-left`}
             >
               <div className="flex items-center gap-3.5 min-w-0">

@@ -11,17 +11,21 @@ import {
   MapPin,
   Megaphone,
   Moon,
+  Newspaper,
   PhoneCall,
   ShieldCheck,
   Sun,
+  Trophy,
   Truck,
   UserPlus,
+  Wrench,
 } from 'lucide-react';
 import shardaTempleImg from '../../assets/images/maihar_sharda_temple_1795168401598.jpg';
 import ghantagharImg from '../../assets/images/maihar_ghantaghar_town_1795168386525.jpg';
 import cleanStreetImg from '../../assets/images/maihar_clean_street_1795168386862.jpg';
 import heritageGardenImg from '../../assets/images/maihar_heritage_garden_1795168386059.jpg';
 import { ICON_CIRCLE_THEMES, UI } from '../../theme/tokens';
+import { E_NAGARPALIKA_PORTAL_URL } from '../../constants';
 import { useApp } from '../../store/AppContext';
 
 export type FrontPublicScreen =
@@ -33,7 +37,9 @@ export type FrontPublicScreen =
   | 'about'
   | 'faq'
   | 'terms'
-  | 'privacy';
+  | 'privacy'
+  | 'achievements'
+  | 'news';
 
 interface FrontPageViewProps {
   onOpenLogin: () => void;
@@ -111,7 +117,9 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
       label: t.tilePayTax,
       icon: CreditCard,
       iconTint: ICON_CIRCLE_THEMES.indigo,
-      onClick: onRequireLogin,
+      onClick: () => {
+        window.location.href = E_NAGARPALIKA_PORTAL_URL;
+      },
     },
     {
       id: 'garbage',
@@ -126,6 +134,20 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
       icon: Landmark,
       iconTint: ICON_CIRCLE_THEMES.saffron,
       onClick: () => onOpenPublicScreen('temple'),
+    },
+    {
+      id: 'achievements',
+      label: language === 'hi' ? 'नगर उपलब्धियां' : 'Achievements',
+      icon: Trophy,
+      iconTint: ICON_CIRCLE_THEMES.amber,
+      onClick: () => onOpenPublicScreen('achievements'),
+    },
+    {
+      id: 'news',
+      label: language === 'hi' ? 'नगर समाचार' : 'City News',
+      icon: Newspaper,
+      iconTint: ICON_CIRCLE_THEMES.blue,
+      onClick: () => onOpenPublicScreen('news'),
     },
     {
       id: 'helplines',
@@ -145,15 +167,15 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
       id: 'cityinfo',
       label: language === 'hi' ? 'अपना क्षेत्र' : 'Ward & City',
       icon: Building2,
-      iconTint: ICON_CIRCLE_THEMES.amber,
+      iconTint: ICON_CIRCLE_THEMES.teal,
       onClick: () => onOpenPublicScreen('cityinfo'),
     },
     {
-      id: 'notices',
-      label: language === 'hi' ? 'सूचना पट्ट' : 'Notices',
-      icon: Megaphone,
-      iconTint: ICON_CIRCLE_THEMES.slate,
-      onClick: () => onOpenPublicScreen('cityinfo'),
+      id: 'app_issues',
+      label: language === 'hi' ? 'ऐप समस्याएं' : 'App Issues',
+      icon: Wrench,
+      iconTint: ICON_CIRCLE_THEMES.indigo,
+      onClick: onRequireLogin,
     },
   ];
 
@@ -384,6 +406,26 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
             aria-label={t.infoAndLegalSection}
             className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-semibold text-[var(--mnp-text-secondary)]"
           >
+            <button
+              type="button"
+              onClick={() => onOpenPublicScreen('achievements')}
+              className="min-h-[36px] px-1 hover:text-[var(--mnp-primary)] hover:underline"
+            >
+              {t.achievementsTitle}
+            </button>
+            <span aria-hidden="true" className="text-[var(--mnp-text-muted)]">
+              ·
+            </span>
+            <button
+              type="button"
+              onClick={() => onOpenPublicScreen('news')}
+              className="min-h-[36px] px-1 hover:text-[var(--mnp-primary)] hover:underline"
+            >
+              {t.newsTitle}
+            </button>
+            <span aria-hidden="true" className="text-[var(--mnp-text-muted)]">
+              ·
+            </span>
             <button
               type="button"
               onClick={() => onOpenPublicScreen('about')}

@@ -153,6 +153,40 @@ export interface Translations {
   serviceGarbageSub: string;
   serviceTempleSub: string;
   serviceTrackSub: string;
+  appIssuesTitle: string;
+  appIssuesSub: string;
+  aboutAppTitle: string;
+  aboutAppSub: string;
+  achievementsTitle: string;
+  achievementsSub: string;
+  newsTitle: string;
+  newsSub: string;
+  achievementsFilterAll: string;
+  newsFilterAll: string;
+  newsBreakingBadge: string;
+  newsTodayLive: string;
+  tankerBookingTitle: string;
+  tankerBookingSub: string;
+  jcbBookingTitle: string;
+  jcbBookingSub: string;
+  cameraOnlyPrompt: string;
+  liveCameraSecurityNote: string;
+  openCameraBtn: string;
+  capturePhotoBtn: string;
+  retakePhotoBtn: string;
+  cameraPermissionDenied: string;
+  cameraSwitchBtn: string;
+  vehicleLiveLocationTitle: string;
+  vehicleCurrentStatus: string;
+  liveGpsTracking: string;
+  speedLabel: string;
+  lastPingLabel: string;
+  stopsTimelineTitle: string;
+  completedStopLabel: string;
+  currentStopLabel: string;
+  upcomingStopLabel: string;
+  setArrivalAlertBtn: string;
+  arrivalAlertSetMsg: string;
 
   // Helplines
   helplinesTitle: string;
@@ -600,6 +634,40 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     serviceGarbageSub: 'कचरा संग्रहण वाहन मार्ग व आगमन समय',
     serviceTempleSub: 'माँ शारदा देवी दर्शन, आरती, भीड़ व पार्किंग',
     serviceTrackSub: 'अपनी दर्ज शिकायतों की स्थिति और इतिहास देखें',
+    appIssuesTitle: 'ऐप संबंधित समस्याएं',
+    appIssuesSub: 'ऐप में बग या तकनीकी दिक्कत की सीधे एडमिन से शिकायत',
+    aboutAppTitle: 'ऐप के बारे में',
+    aboutAppSub: 'संस्करण v2.1.0 एवं IT प्रशासन विवरण',
+    achievementsTitle: 'नगर पालिका उपलब्धियां',
+    achievementsSub: 'नगर पालिका द्वारा पूर्ण किए गए प्रमुख विकास एवं जनकल्याणकारी कार्य',
+    newsTitle: 'नगर समाचार',
+    newsSub: 'मैहर नगर पालिका की दैनिक सूचनाएं, बुलेटिन एवं ताज़ा समाचार',
+    achievementsFilterAll: 'सभी कार्य',
+    newsFilterAll: 'सभी समाचार',
+    newsBreakingBadge: 'ताज़ा अपडेट',
+    newsTodayLive: 'आज का दैनिक बुलेटिन',
+    tankerBookingTitle: 'पानी टैंकर बुकिंग',
+    tankerBookingSub: 'आपातकालीन पेयजल व आयोजनों हेतु नगर पालिका टैंकर मंगाएं',
+    jcbBookingTitle: 'जेसीबी / भारी मशीनरी बुकिंग',
+    jcbBookingSub: 'मलबा हटाने, सफाई व खुदाई हेतु नगर पालिका जेसीबी मंगाएं',
+    cameraOnlyPrompt: 'लाइव कैमरे से फोटो खींचें',
+    liveCameraSecurityNote: 'सुरक्षा नियम: केवल मौके से लाइव कैमरे द्वारा ली गई फोटो ही मान्य है। गैलरी से अपलोडिंग प्रतिबंधित है।',
+    openCameraBtn: 'लाइव कैमरा चालू करें',
+    capturePhotoBtn: 'फोटो क्लिक करें',
+    retakePhotoBtn: 'पुनः फोटो खींचें',
+    cameraPermissionDenied: 'कैमरा अनुमति अस्वीकृत है। कृपया ब्राउज़र सेटिंग्स में कैमरा की अनुमति दें।',
+    cameraSwitchBtn: 'कैमरा बदलें',
+    vehicleLiveLocationTitle: 'वाहन की वर्तमान स्थिति (लाइव ट्रैकिंग)',
+    vehicleCurrentStatus: 'कचरा संग्रहण जारी',
+    liveGpsTracking: 'AIS-140 लाइव जीपीएस',
+    speedLabel: 'गति',
+    lastPingLabel: 'अंतिम सिग्नल',
+    stopsTimelineTitle: 'मार्ग स्टॉप एवं संग्रहण प्रगति',
+    completedStopLabel: 'कचरा उठाव संपन्न',
+    currentStopLabel: 'वाहन अभी यहाँ है',
+    upcomingStopLabel: 'आगामी स्टॉप',
+    setArrivalAlertBtn: 'आगमन अलार्म सेट करें',
+    arrivalAlertSetMsg: 'वाहन आपके वार्ड में पहुँचने पर अलर्ट भेजा जाएगा',
 
     helplinesTitle: 'आपातकालीन हेल्पलाइन',
     helplinesDisclaimer: 'सूचना: ये सभी डेमो हेतु स्पष्ट नमूना नंबर हैं। वास्तविक आपातकाल में आधिकारिक नंबर डायल करें।',
@@ -1128,6 +1196,40 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     serviceGarbageSub: 'Waste collection routes & estimated arrival',
     serviceTempleSub: 'Maa Sharda Devi timings, crowd, parking & lost/found',
     serviceTrackSub: 'Track status & timeline of registered grievances',
+    appIssuesTitle: 'App Related Issues',
+    appIssuesSub: 'Direct grievance to Municipal Admin for app issues',
+    aboutAppTitle: 'About App',
+    aboutAppSub: 'Version v2.1.0 & IT administration details',
+    achievementsTitle: 'Municipal Achievements',
+    achievementsSub: 'Major development works & milestones completed by Nagar Palika',
+    newsTitle: 'City News',
+    newsSub: "Daily municipal bulletin, announcements & today's civic news",
+    achievementsFilterAll: 'All Works',
+    newsFilterAll: 'All News',
+    newsBreakingBadge: 'Breaking Update',
+    newsTodayLive: "Today's Daily Bulletin",
+    tankerBookingTitle: 'Water Tanker Booking',
+    tankerBookingSub: 'Request emergency or event water tanker from Nagar Palika',
+    jcbBookingTitle: 'JCB & Machinery Booking',
+    jcbBookingSub: 'Book municipal JCB earthmover for debris removal & excavation',
+    cameraOnlyPrompt: 'Capture Photo Using Live Camera',
+    liveCameraSecurityNote: 'Security Rule: Only live photographs taken at the spot are accepted. Gallery upload is restricted.',
+    openCameraBtn: 'Open Live Camera',
+    capturePhotoBtn: 'Capture Photo',
+    retakePhotoBtn: 'Retake Photo',
+    cameraPermissionDenied: 'Camera access denied. Please allow camera access in browser settings.',
+    cameraSwitchBtn: 'Switch Camera',
+    vehicleLiveLocationTitle: 'Current Vehicle Location (Live Tracking)',
+    vehicleCurrentStatus: 'Waste Collection In Progress',
+    liveGpsTracking: 'AIS-140 Live GPS',
+    speedLabel: 'Speed',
+    lastPingLabel: 'Last Signal',
+    stopsTimelineTitle: 'Route Stops & Collection Progress',
+    completedStopLabel: 'Waste Collected',
+    currentStopLabel: 'Vehicle Is Here Right Now',
+    upcomingStopLabel: 'Upcoming Stop',
+    setArrivalAlertBtn: 'Set Arrival Alert',
+    arrivalAlertSetMsg: 'Arrival alert set for your ward',
 
     helplinesTitle: 'Emergency Helplines',
     helplinesDisclaimer: 'Notice: All numbers below are obvious sample placeholders for demo review only.',

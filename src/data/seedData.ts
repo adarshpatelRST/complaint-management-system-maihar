@@ -1,5 +1,6 @@
-import { SAMPLE_PHOTOS } from '../constants';
+import { MUNICIPAL_GALLERY, SAMPLE_PHOTOS } from '../constants';
 import {
+  AchievementItem,
   AppNotification,
   CertificateApplication,
   CitizenAccount,
@@ -8,6 +9,7 @@ import {
   Employee,
   FestivalEvent,
   LostAndFoundReport,
+  NewsItem,
   Notice,
   Payment,
   Place,
@@ -15,6 +17,8 @@ import {
   TaxAccount,
   TempleLiveFeed,
   WardDirectoryEntry,
+  WaterTankerBooking,
+  JcbBooking,
 } from '../types';
 
 const HOUR = 60 * 60 * 1000;
@@ -33,8 +37,8 @@ export function createSeedComplaints(): Complaint[] {
     // 1. OVERDUE (Sanitation SLA 24h -> created 46h ago => ~192% elapsed => President Escalation)
     {
       id: 'MHR-2026-0001',
-      mobile: DEFAULT_CITIZEN_MOBILE,
-      name: DEFAULT_CITIZEN_NAME,
+      mobile: '9999900001',
+      name: 'रमेश कुमार पटेल (डेमो)',
       ward: 4,
       category: 'sanitation',
       landmark: 'घंटाघर चौक, पुराना सब्जी बाजार के पास',
@@ -96,11 +100,11 @@ export function createSeedComplaints(): Complaint[] {
         },
       ],
     },
-    // 3. RESOLVED AWAITING FEEDBACK (citizen's own complaint)
+    // 3. RESOLVED AWAITING FEEDBACK (demo citizen complaint)
     {
       id: 'MHR-2026-0003',
-      mobile: DEFAULT_CITIZEN_MOBILE,
-      name: DEFAULT_CITIZEN_NAME,
+      mobile: '9999900001',
+      name: 'रमेश कुमार पटेल (डेमो)',
       ward: 4,
       category: 'sanitation',
       landmark: 'रामलीला मैदान के पूर्वी कोने पर',
@@ -444,6 +448,30 @@ export function createSeedComplaints(): Complaint[] {
           status: 'Assigned',
           note: 'सामान्य प्रशासन के नीलेश शुक्ला को निरीक्षण हेतु सौंपी गई।',
           by: 'श्रीमती रेखा पाठक (सामान्य प्रशासन)',
+        },
+      ],
+    },
+    // 13. APP RELATED ISSUE (Assigned directly to Municipal Admin Sanjay Kumar Dubey)
+    {
+      id: 'MHR-2026-0013',
+      mobile: '9999900001',
+      name: 'रमेश कुमार पटेल (डेमो)',
+      ward: 4,
+      category: 'app_issue',
+      landmark: 'मैहर सेवा मोबाइल ऐप (IT Admin Cell)',
+      lat: 24.2655,
+      lng: 80.7585,
+      description:
+        '[लॉगिन/OTP] नए नंबर से लॉगिन करने पर OTP आने में 2 मिनट की देरी हो रही थी। कृपया SMS गेटवे की गति की जांच करें।',
+      createdAt: hoursAgo(6),
+      status: 'Assigned',
+      assignedTo: 'emp-admin-1',
+      history: [
+        {
+          time: hoursAgo(6),
+          status: 'Assigned',
+          note: 'ऐप संबंधित शिकायत सीधे नगर पालिका IT व्यवस्थापक (Admin: संजय कुमार दुबे) को सौंपी गई।',
+          by: DEFAULT_CITIZEN_NAME,
         },
       ],
     },
@@ -916,7 +944,7 @@ export function createSeedNotifications(): AppNotification[] {
       read: false,
       channel: 'SMS',
       complaintId: 'MHR-2026-0003',
-      targetMobile: DEFAULT_CITIZEN_MOBILE,
+      targetMobile: '9999900001',
     },
     {
       id: 'notif-2',
@@ -1312,3 +1340,347 @@ export const SEED_TEMPLE_FEED: TempleLiveFeed = {
   ],
   updatedAt: new Date().toISOString(),
 };
+
+export const SEED_ACHIEVEMENTS: AchievementItem[] = [
+  {
+    id: 'ach-1',
+    titleHi: 'घंटाघर मुख्य बाजार एवं स्टेशन मार्ग सीसी व डामरीकरण',
+    titleEn: 'Ghantaghar Main Market & Station Road CC & Bituminous Paving',
+    category: 'roads',
+    categoryLabelHi: 'सड़क एवं बुनियादी ढांचा',
+    categoryLabelEn: 'Roads & Infrastructure',
+    descriptionHi:
+      'मैहर रेलवे स्टेशन से घंटाघर चौक और मुख्य बाजार तक 14.8 किमी मार्ग का चौड़ीकरण, आधुनिक डामरीकरण, आरसीसी जल निकासी नाली और दोनों ओर इंटरलॉकिंग टाइल्स फुटपाथ का निर्माण पूर्ण।',
+    descriptionEn:
+      'Widening, bituminous overlay, RCC drainage culverts, and pedestrian interlocking paver walkways completed along 14.8 km connecting Maihar Railway Station to Ghantaghar Chowk.',
+    completionDate: 'जनवरी 2026',
+    ward: 4,
+    wardNameHi: 'वार्ड 4 - घंटाघर मुख्य बाजार',
+    wardNameEn: 'Ward 4 - Ghantaghar Main Market',
+    budget: '₹ 4.25 करोड़',
+    keyMetric: {
+      value: '14.8 किमी',
+      labelHi: 'आधुनिक पक्की सड़क एवं फुटपाथ',
+      labelEn: 'Paved road & pedestrian walkway',
+    },
+    photoBefore: MUNICIPAL_GALLERY.pothole,
+    photoAfter: MUNICIPAL_GALLERY.repairedRoad,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+  {
+    id: 'ach-2',
+    titleHi: 'स्वच्छ भारत मिशन: शत-प्रतिशत डोर-टू-डोर कचरा संग्रहण एवं ODF++ दर्जा',
+    titleEn: 'Swachh Bharat: 100% Door-to-Door Waste Collection & ODF++ City Status',
+    category: 'sanitation',
+    categoryLabelHi: 'स्वच्छता एवं अपशिष्ट प्रबंधन',
+    categoryLabelEn: 'Sanitation & Solid Waste',
+    descriptionHi:
+      'सभी 15 वार्डों में जीपीएस युक्त टिपर वाहनों द्वारा दैनिक गीला व सूखा कचरा पृथक्करण, 12 सार्वजनिक सामुदायिक शौचालयों का आधुनिक जीर्णोद्धार और खुले कचरा डंपिंग स्थलों का पूर्ण उन्मूलन।',
+    descriptionEn:
+      'Comprehensive daily segregated wet/dry waste collection across all 15 wards using GPS-tracked tippers, modern refurbishment of 12 community complexes, and zero open dumping points.',
+    completionDate: 'दिसंबर 2025',
+    ward: 15,
+    wardNameHi: 'सभी 15 वार्ड',
+    wardNameEn: 'All 15 Wards',
+    budget: '₹ 2.80 करोड़',
+    keyMetric: {
+      value: '15 वार्ड ODF++',
+      labelHi: 'स्वच्छता सर्वेक्षण में उत्कृष्ट प्रदर्शन',
+      labelEn: 'Excellence in Swachh Survekshan',
+    },
+    photoBefore: MUNICIPAL_GALLERY.garbage,
+    photoAfter: MUNICIPAL_GALLERY.maiharCleanStreet,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+  {
+    id: 'ach-3',
+    titleHi: 'माँ शारदा देवी धाम तीर्थयात्री सुविधा गलियारा व विश्राम गृह',
+    titleEn: 'Maa Sharda Devi Pilgrim Amenities Corridor & Waiting Halls',
+    category: 'pilgrim',
+    categoryLabelHi: 'तीर्थयात्री एवं पर्यटन सुविधाएं',
+    categoryLabelEn: 'Pilgrim & Tourism Amenities',
+    descriptionHi:
+      'त्रिकूटा पहाड़ी स्थित माँ शारदा देवी मंदिर में 50,000+ श्रद्धालुओं की दैनिक सुविधा हेतु नए छायादार शेड, 16 वाटर प्यूरीफायर कियोस्क, आधुनिक सुलभ कॉम्प्लेक्स और प्राथमिक चिकित्सा केंद्र का लोकार्पण।',
+    descriptionEn:
+      'Commissioned pilgrim waiting shelters, 16 RO water kiosks, modular sanitation facilities, and first-aid center on Trikuta Hill for over 50,000 daily devotees.',
+    completionDate: 'नवंबर 2025',
+    ward: 1,
+    wardNameHi: 'वार्ड 1 - शारदा देवी पहाड़ी मार्ग',
+    wardNameEn: 'Ward 1 - Sharda Devi Hill Road',
+    budget: '₹ 6.50 करोड़',
+    keyMetric: {
+      value: '50,000+ यात्री/दिन',
+      labelHi: 'पेयजल, विश्राम शेड व सुरक्षा',
+      labelEn: 'Drinking water, shelter & safety',
+    },
+    photo: MUNICIPAL_GALLERY.temple,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+  {
+    id: 'ach-4',
+    titleHi: 'मैहर संगीत वाटिका एवं घंटाघर हेरिटेज पार्क सौंदर्यीकरण',
+    titleEn: 'Maihar Sangeet Vatika & Ghantaghar Heritage Park Beautification',
+    category: 'beautification',
+    categoryLabelHi: 'शहरी सौंदर्यीकरण व उद्यान',
+    categoryLabelEn: 'Urban Beautification & Parks',
+    descriptionHi:
+      'उस्ताद अलाउद्दीन खां साहब की ऐतिहासिक संगीत विरासत को समर्पित "मैहर संगीत वाटिका" में म्यूजिकल फाउंटेन, वॉकिंग ट्रैक, ओपन जिम, बच्चों का खेल क्षेत्र और 12,500 वर्ग मीटर हरित क्षेत्र विकसित किया गया।',
+    descriptionEn:
+      'Developed Maihar Sangeet Vatika dedicated to Ustad Allauddin Khan heritage with musical water fountain, jogging path, open gymnasium, children play zone, and 12,500 sq.m green landscaping.',
+    completionDate: 'अक्टूबर 2025',
+    ward: 4,
+    wardNameHi: 'वार्ड 4 - घंटाघर मुख्य बाजार',
+    wardNameEn: 'Ward 4 - Ghantaghar Main Market',
+    budget: '₹ 1.95 करोड़',
+    keyMetric: {
+      value: '12,500 वर्ग मी.',
+      labelHi: 'हरित क्षेत्र एवं संगीत फव्वारा',
+      labelEn: 'Green landscape & musical fountain',
+    },
+    photo: MUNICIPAL_GALLERY.heritageGarden,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+  {
+    id: 'ach-5',
+    titleHi: 'अमृत 2.0: 12,500 नए घरों में 24×7 नल जल कनेक्शन',
+    titleEn: 'AMRUT 2.0: 12,500 New Household Piped Clean Water Connections',
+    category: 'water',
+    categoryLabelHi: 'पेयजल एवं जल प्रदाय',
+    categoryLabelEn: 'Water Supply & AMRUT 2.0',
+    descriptionHi:
+      'नगरीय क्षेत्र में 38 किमी नई एचडीपीई जल वितरण पाइपलाइन बिछाकर 12,500 परिवारों को शुद्ध फिल्टर पेयजल का सीधा कनेक्शन दिया गया। जल दबाव व शुद्धता की 24×7 सेंसर निगरानी।',
+    descriptionEn:
+      'Laid 38 km of new HDPE distribution pipelines delivering clean, filtered drinking water to 12,500 households with automated pressure and purity sensor monitoring.',
+    completionDate: 'फरवरी 2026',
+    ward: 15,
+    wardNameHi: 'सभी 15 वार्ड',
+    wardNameEn: 'All 15 Wards',
+    budget: '₹ 18.20 करोड़',
+    keyMetric: {
+      value: '98% कवरेज',
+      labelHi: 'शुद्ध पेयजल आपूर्ति',
+      labelEn: 'Safe piped water coverage',
+    },
+    photo: MUNICIPAL_GALLERY.repairedRoad,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+  {
+    id: 'ach-6',
+    titleHi: 'स्मार्ट ऊर्जा दक्षता: 3,800 ऑटोमेटेड एलईडी स्ट्रीट लाइट्स स्थापना',
+    titleEn: 'Smart Energy Efficiency: 3,800 Automated LED Street Lights Installed',
+    category: 'energy',
+    categoryLabelHi: 'ऊर्जा एवं प्रकाश व्यवस्था',
+    categoryLabelEn: 'Energy & Smart Lighting',
+    descriptionHi:
+      'नगर की सभी मुख्य सड़कों, चौराहों और कॉलोनियों में पुराने सोडियम लैंप बदलकर 3,800 ऊर्जा-कुशल स्मार्ट एलईडी लाइट्स लगाई गईं, जिससे नगर पालिका के विद्युत बिल में 42% की मासिक बचत हुई।',
+    descriptionEn:
+      'Upgraded 3,800 legacy sodium fixtures to energy-efficient automated LED streetlights with centralized timer controls, reducing municipal electricity expenditures by 42%.',
+    completionDate: 'दिसंबर 2025',
+    ward: 15,
+    wardNameHi: 'सभी 15 वार्ड',
+    wardNameEn: 'All 15 Wards',
+    budget: '₹ 1.40 करोड़',
+    keyMetric: {
+      value: '42% ऊर्जा बचत',
+      labelHi: 'स्वचालित स्मार्ट प्रकाश व्यवस्था',
+      labelEn: 'Automated energy savings',
+    },
+    photo: MUNICIPAL_GALLERY.ghantaghar,
+    statusBadgeHi: 'सफलतापूर्वक पूर्ण',
+    statusBadgeEn: 'Successfully Completed',
+  },
+];
+
+export const SEED_NEWS: NewsItem[] = [
+  {
+    id: 'news-1',
+    titleHi: 'विशेष स्वच्छता महा-अभियान: आज सभी 15 वार्डों में विशेष फॉगिंग व सैनिटाइजेशन दल सक्रिय',
+    titleEn: 'Special Sanitation Mega Drive: Fogging & sanitization squad active across all 15 wards today',
+    category: 'sanitation',
+    categoryLabelHi: 'स्वच्छता एवं स्वास्थ्य',
+    categoryLabelEn: 'Sanitation & Health',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज प्रातः 07:30 बजे',
+    timeEn: 'Today 07:30 AM',
+    isToday: true,
+    isBreaking: true,
+    summaryHi:
+      'मौसम परिवर्तन को देखते हुए मुख्य नगर पालिका अधिकारी के निर्देश पर आज सुबह 7 बजे से सभी वार्डों में कीटनाशक छिड़काव एवं सघन नाली सफाई अभियान शुरू किया गया है।',
+    summaryEn:
+      'Following CMO directives, a comprehensive fogging, anti-larva spraying, and storm drain desilting drive was mobilized across all 15 wards starting 7:00 AM today.',
+    contentHi:
+      'नगर पालिका परिषद मैहर द्वारा आज प्रातःकाल से विशेष स्वच्छता महा-अभियान प्रारंभ किया गया है। स्वास्थ्य शाखा के 6 विशेष उड़नदस्ते और 45 सफाई मित्र वार्ड 1 से 15 तक नालियों की सिल्ट निकालने, ब्लीचिंग पाउडर डालने तथा शाम के समय सघन फॉगिंग करने हेतु तैनात किए गए हैं। नागरिक अपने क्षेत्र में किसी भी कचरा ढेर की सूचना ऐप के माध्यम से तुरंत दर्ज करा सकते हैं।',
+    contentEn:
+      'Nagar Palika Parishad Maihar has launched an intensive citywide sanitation drive today. Six flying inspection squads and 45 sanitary workers are deployed across Wards 1 to 15 for desilting drains, applying bleaching powder, and conducting thermal fogging. Citizens are encouraged to report any unattended garbage spots directly via this portal.',
+    sourceDeptHi: 'स्वास्थ्य एवं स्वच्छता विभाग, मैहर',
+    sourceDeptEn: 'Health & Sanitation Dept, Maihar',
+    photo: MUNICIPAL_GALLERY.maiharCleanStreet,
+  },
+  {
+    id: 'news-2',
+    titleHi: 'अमृत जल प्रदाय समय सारिणी: आज शाम 5:00 से 7:30 बजे तक होगा नियमित पेयजल वितरण',
+    titleEn: 'AMRUT Water Supply Schedule: Regular water distribution today from 5:00 PM to 7:30 PM',
+    category: 'water',
+    categoryLabelHi: 'जल प्रदाय सूचना',
+    categoryLabelEn: 'Water Works Bulletin',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज प्रातः 09:00 बजे',
+    timeEn: 'Today 09:00 AM',
+    isToday: true,
+    isBreaking: false,
+    summaryHi:
+      'जल शोधन संयंत्र का दैनिक रखरखाव पूर्ण हो चुका है। आज शाम सभी 15 वार्डों में सामान्य दबाव के साथ पेयजल आपूर्ति सुचारू रहेगी।',
+    summaryEn:
+      'Routine maintenance at the Maihar water filtration plant has concluded. Water supply will proceed smoothly at normal pressure across all wards this evening.',
+    contentHi:
+      'जल प्रदाय विभाग द्वारा सूचित किया जाता है कि टमस बैराज एवं मुख्य फिल्टर प्लांट से पानी की सप्लाई पूरी तरह सामान्य है। वार्ड 1 से 8 में शाम 5:00 से 6:15 बजे तक तथा वार्ड 9 से 15 में शाम 6:15 से 7:30 बजे तक नियमित पानी छोड़ा जाएगा। नागरिकों से अनुरोध है कि जल का अपव्यय न करें और टोंटियां बंद रखें।',
+    contentEn:
+      'The Water Works department informs that reservoir levels and filtration systems are operating normally. Wards 1 to 8 will receive water from 5:00 PM to 6:15 PM, and Wards 9 to 15 from 6:15 PM to 7:30 PM. Citizens are kindly requested to avoid water wastage and keep taps properly shut.',
+    sourceDeptHi: 'जल प्रदाय एवं संधारण शाखा',
+    sourceDeptEn: 'Water Works & Maintenance Wing',
+  },
+  {
+    id: 'news-3',
+    titleHi: 'माँ शारदा देवी मंदिर सूचना: आज विशेष संध्या आरती एवं श्रद्धालुओं हेतु सुगम दर्शन व्यवस्था',
+    titleEn: 'Maa Sharda Temple Notice: Special Sandhya Aarti & smooth darshan arrangements today',
+    category: 'temple',
+    categoryLabelHi: 'मंदिर एवं दर्शन बुलेटिन',
+    categoryLabelEn: 'Temple & Darshan Bulletin',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज प्रातः 10:15 बजे',
+    timeEn: 'Today 10:15 AM',
+    isToday: true,
+    isBreaking: false,
+    summaryHi:
+      'आज शाम 7:30 बजे माँ शारदा देवी की भव्य संध्या महा-आरती संपन्न होगी। रोपवे एवं सीढ़ियों पर कतार प्रबंधन हेतु अतिरिक्त सुरक्षा बल तैनात हैं।',
+    summaryEn:
+      'Grand Sandhya Maha Aarti scheduled at 7:30 PM today atop Trikuta Hill. Ropeway transit and stairways are operating smoothly with dedicated volunteer assistance.',
+    contentHi:
+      'त्रिकूटा पहाड़ी स्थित सिद्धपीठ माँ शारदा देवी मंदिर में आज सामान्य दिनों की तुलना में मध्यम भीड़ है। दर्शनार्थियों के लिए सभी 3 पेयजल प्याऊ, निःशुल्क जूता स्टैंड और छायादार शेड में कुलर चालू कर दिए गए हैं। रोपवे का संचालन शाम 7:00 बजे तक निर्बाध रहेगा। वरिष्ठ नागरिकों एवं दिव्यांगजनों हेतु व्हीलचेयर सहायता तलहटी पर उपलब्ध है।',
+    contentEn:
+      'Devotee footfall at Maa Sharda Devi Temple atop Trikuta Hill is currently moderate. All 3 drinking water kiosks, free shoe deposit booths, and misting fans in waiting shelters are active. The passenger ropeway will operate continuously until 7:00 PM. Wheelchair assistance is available at the base station for seniors.',
+    sourceDeptHi: 'माँ शारदा देवी मंदिर प्रबंध समिति',
+    sourceDeptEn: 'Maa Sharda Temple Management Trust',
+    photo: MUNICIPAL_GALLERY.temple,
+  },
+  {
+    id: 'news-4',
+    titleHi: 'नगर कर अग्रिम भुगतान छूट: e-Nagarpalika पोर्टल पर आज ही जमा करें और पाएं 10% की विशेष छूट',
+    titleEn: 'Municipal Tax Rebate: Pay advance property & water tax online on e-Nagarpalika today for 10% rebate',
+    category: 'announcement',
+    categoryLabelHi: 'राजस्व एवं कर सूचना',
+    categoryLabelEn: 'Revenue & Tax Notice',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज पूर्वाह्न 11:30 बजे',
+    timeEn: 'Today 11:30 AM',
+    isToday: true,
+    isBreaking: false,
+    summaryHi:
+      'वित्तीय वर्ष 2025-26 के अग्रिम संपत्ति कर एवं जल कर भुगतान पर नगर पालिका परिषद द्वारा 10% की विशेष छूट दी जा रही है।',
+    summaryEn:
+      'A special 10% rebate is available on advance payment of Property Tax and Water Charges through the official MP e-Nagarpalika citizen portal.',
+    contentHi:
+      'राजस्व विभाग, नगर पालिका परिषद मैहर द्वारा सभी भवन स्वामियों एवं नागरिकों को सूचित किया जाता है कि वे आधिकारिक e-Nagarpalika पोर्टल (https://enagarpalika.mp.gov.in) पर अपने प्रॉपर्टी आईडी से ऑनलाइन भुगतान कर छूट का लाभ उठाएं। नागरिक इस ऐप के "सेवाएं > नगर पालिका कर भुगतान" विकल्प पर क्लिक करके सीधे आधिकारिक पोर्टल पर पहुंच सकते हैं।',
+    contentEn:
+      'Revenue Wing, Nagar Palika Parishad Maihar urges property owners to avail of the 10% advance rebate by paying dues online via the official e-Nagarpalika portal (https://enagarpalika.mp.gov.in). Citizens can use the "Pay Municipal Taxes" service link inside this app to redirect directly to the portal.',
+    sourceDeptHi: 'राजस्व शाखा, नगर पालिका मैहर',
+    sourceDeptEn: 'Revenue Branch, Nagar Palika Maihar',
+  },
+  {
+    id: 'news-5',
+    titleHi: 'घंटाघर मुख्य बाजार में डिवाइडर पेंटिंग व सोलर स्ट्रीट लाइट टेस्टिंग कार्य आज पूर्ण',
+    titleEn: 'Divider painting & solar street lighting testing successfully concluded at Ghantaghar today',
+    category: 'civic',
+    categoryLabelHi: 'लोक निर्माण एवं प्रकाश',
+    categoryLabelEn: 'PWD & Public Works',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज दोपहर 01:45 बजे',
+    timeEn: 'Today 01:45 PM',
+    isToday: true,
+    isBreaking: false,
+    summaryHi:
+      'घंटाघर चौक से पुरानी गल्ला मंडी तक सड़क डिवाइडर पर रिफ्लेक्टिव जेब्रा पेंटिंग एवं 24 नए सोलर पाथवे लैंप्स का परीक्षण सफल रहा।',
+    summaryEn:
+      'Reflective zebra marking along road dividers and testing of 24 newly installed solar pathway fixtures between Ghantaghar and Galla Mandi finished today.',
+    contentHi:
+      'लोक निर्माण शाखा द्वारा नगर सौंदर्यीकरण योजना के अंतर्गत घंटाघर बाजार क्षेत्र में सड़क सुरक्षा बढ़ाने के लिए थर्मोप्लास्टिक रिफ्लेक्टिव पेंटिंग का कार्य पूर्ण कर लिया गया है। साथ ही बिजली बचत हेतु लगाए गए सोलर पाथवे लैंप्स का परीक्षण भी पूरा हो गया है, जिससे रात्रि में यातायात अधिक सुरक्षित और सुगम होगा।',
+    contentEn:
+      'The Public Works Department has completed high-visibility thermoplastic markings along key road dividers in the Ghantaghar commercial area. Testing of newly installed smart solar fixtures has also concluded, boosting nighttime driver safety and pedestrian visibility.',
+    sourceDeptHi: 'लोक निर्माण शाखा (PWD)',
+    sourceDeptEn: 'Public Works Dept (PWD)',
+    photo: MUNICIPAL_GALLERY.ghantaghar,
+  },
+  {
+    id: 'news-6',
+    titleHi: 'नागरिक संवाद शिविर: कल टाउन हॉल मैहर में पेंशन, समग्र व राशन कार्ड सुधार हेतु विशेष कैंप',
+    titleEn: 'Citizen Outreach Camp: Special camp tomorrow at Town Hall for pension, Samagra & ration card updates',
+    category: 'announcement',
+    categoryLabelHi: 'सार्वजनिक जनकल्याण सूचना',
+    categoryLabelEn: 'Public Welfare Notice',
+    date: new Date().toISOString().split('T')[0],
+    timeHi: 'आज अपराह्न 03:00 बजे',
+    timeEn: 'Today 03:00 PM',
+    isToday: true,
+    isBreaking: false,
+    summaryHi:
+      'वृद्धावस्था, विधवा व दिव्यांग पेंशन ई-केवाईसी तथा समग्र आईडी व जन्म प्रमाणपत्र सुधार हेतु कल सुबह 10:30 बजे से विशेष कैंप लगेगा।',
+    summaryEn:
+      'A special citizen camp will be organized tomorrow at Town Hall from 10:30 AM for pension e-KYC, Samagra ID corrections, and civil certificate inquiries.',
+    contentHi:
+      'मुख्य नगर पालिका अधिकारी द्वारा जारी आदेशानुसार वार्ड 1 से 15 के सभी पात्र नागरिकों के लिए कल टाउन हॉल मैहर में एक-दिवसीय सहायता शिविर आयोजित किया जा रहा है। शिविर में समग्र आधार ई-केवाईसी, परिवार विभाजन, सामाजिक सुरक्षा पेंशन सत्यापन तथा राशन पर्ची पात्रता की जांच नगर पालिका कर्मचारियों द्वारा मौके पर ही की जाएगी। नागरिक अपने आधार कार्ड व बैंक पासबुक साथ लाएं।',
+    contentEn:
+      'As directed by the Chief Municipal Officer, an integrated citizen service camp will be held at Town Hall Maihar tomorrow. Municipal teams will process Samagra e-KYC, family card updates, social security pension verifications, and ration card inquiries on the spot. Citizens are requested to bring their Aadhaar and bank passbooks.',
+    sourceDeptHi: 'सामान्य प्रशासन एवं जनकल्याण शाखा',
+    sourceDeptEn: 'General Administration & Welfare Dept',
+  },
+];
+
+export const SEED_WATER_TANKER_BOOKINGS: WaterTankerBooking[] = [
+  {
+    id: 'WT-2026-0001',
+    citizenMobile: '9999900001',
+    citizenName: 'रमेश कुमार पटेल',
+    ward: 4,
+    deliveryAddress: 'घंटाघर चौक, पुराना बाजार मार्ग, मैहर, मध्य प्रदेश',
+    lat: 24.2662,
+    lng: 80.7581,
+    deliveryDate: new Date().toISOString().split('T')[0],
+    deliverySlot: 'morning',
+    capacityLiters: 5000,
+    purpose: 'पेयजल संकट / सूखा राहत',
+    remarks: 'गली के मोड़ पर टंकी रखी है, सुबह 8 बजे तक डिलीवरी का कष्ट करें।',
+    status: 'Dispatched',
+    bookedAt: hoursAgo(5),
+    vehicleNo: 'MP-19-WT-0312',
+    driverName: 'रामगोपाल वर्मा',
+    driverPhone: '9826011223',
+  },
+];
+
+export const SEED_JCB_BOOKINGS: JcbBooking[] = [
+  {
+    id: 'JCB-2026-0001',
+    citizenMobile: '9999900001',
+    citizenName: 'रमेश कुमार पटेल',
+    ward: 4,
+    worksiteAddress: 'रामलीला मैदान के सामने, वार्ड 4, मैहर',
+    lat: 24.2651,
+    lng: 80.7594,
+    bookingDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    shift: 'morning',
+    machineryType: 'backhoe_loader',
+    workType: 'मलबा व निर्माण कचरा निष्कासन',
+    durationHours: 2,
+    remarks: 'सड़क किनारे पुराना मलबा हटाया जाना है।',
+    status: 'Approved',
+    bookedAt: hoursAgo(8),
+    operatorName: 'राजेंद्र सिंह (ऑपरेटर)',
+    operatorPhone: '9826033445',
+  },
+];
+
