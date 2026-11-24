@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Building2,
-  Camera,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
   CreditCard,
+  Droplets,
+  HardHat,
   Landmark,
   LogIn,
   MapPin,
-  Megaphone,
   Moon,
   Newspaper,
   PhoneCall,
   ShieldCheck,
+  Smartphone,
   Sun,
   Trophy,
   Truck,
@@ -27,6 +28,7 @@ import heritageGardenImg from '../../assets/images/maihar_heritage_garden_179516
 import { ICON_CIRCLE_THEMES, UI } from '../../theme/tokens';
 import { E_NAGARPALIKA_PORTAL_URL } from '../../constants';
 import { useApp } from '../../store/AppContext';
+import { PROBLEM_CATEGORIES } from '../../constants/problemCategories';
 
 export type FrontPublicScreen =
   | 'garbage'
@@ -91,6 +93,14 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
     touchStartX.current = null;
   };
 
+  const problemServices = PROBLEM_CATEGORIES.map((prob) => ({
+    id: `problem_${prob.id}`,
+    label: language === 'hi' ? prob.shortLabelHi : prob.shortLabelEn,
+    icon: prob.icon,
+    iconTint: prob.iconBg,
+    onClick: onRequireLogin,
+  }));
+
   const cityServices: {
     id: string;
     label: string;
@@ -98,13 +108,7 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
     iconTint: string;
     onClick: () => void;
   }[] = [
-    {
-      id: 'report',
-      label: language === 'hi' ? 'शिकायत दर्ज' : 'Report Issue',
-      icon: Camera,
-      iconTint: ICON_CIRCLE_THEMES.red,
-      onClick: onRequireLogin,
-    },
+    ...problemServices,
     {
       id: 'track',
       label: t.tileTrackComplaint,
@@ -129,6 +133,20 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
       onClick: () => onOpenPublicScreen('garbage'),
     },
     {
+      id: 'tanker_booking',
+      label: language === 'hi' ? 'पानी टैंकर' : 'Water Tanker',
+      icon: Droplets,
+      iconTint: ICON_CIRCLE_THEMES.blue,
+      onClick: onRequireLogin,
+    },
+    {
+      id: 'jcb_booking',
+      label: language === 'hi' ? 'जेसीबी बुकिंग' : 'JCB Booking',
+      icon: HardHat,
+      iconTint: ICON_CIRCLE_THEMES.amber,
+      onClick: onRequireLogin,
+    },
+    {
       id: 'temple',
       label: t.tileTempleInfo,
       icon: Landmark,
@@ -137,14 +155,14 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
     },
     {
       id: 'achievements',
-      label: language === 'hi' ? 'नगर उपलब्धियां' : 'Achievements',
+      label: language === 'hi' ? 'नगर पालिका द्वारा किये गए कार्य' : 'Municipal Works',
       icon: Trophy,
       iconTint: ICON_CIRCLE_THEMES.amber,
       onClick: () => onOpenPublicScreen('achievements'),
     },
     {
       id: 'news',
-      label: language === 'hi' ? 'नगर समाचार' : 'City News',
+      label: language === 'hi' ? 'नगर समाचार अपडेट' : 'City News Updates',
       icon: Newspaper,
       iconTint: ICON_CIRCLE_THEMES.blue,
       onClick: () => onOpenPublicScreen('news'),
@@ -171,11 +189,11 @@ export const FrontPageView: React.FC<FrontPageViewProps> = ({
       onClick: () => onOpenPublicScreen('cityinfo'),
     },
     {
-      id: 'app_issues',
-      label: language === 'hi' ? 'ऐप समस्याएं' : 'App Issues',
-      icon: Wrench,
-      iconTint: ICON_CIRCLE_THEMES.indigo,
-      onClick: onRequireLogin,
+      id: 'about_app',
+      label: language === 'hi' ? 'ऐप परिचय' : 'About App',
+      icon: Smartphone,
+      iconTint: ICON_CIRCLE_THEMES.green,
+      onClick: () => onOpenPublicScreen('about'),
     },
   ];
 

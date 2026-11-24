@@ -22,7 +22,7 @@ import { ProfileView } from './modules/profile/ProfileView';
 import { ServicesHub } from './modules/services/ServicesHub';
 import { TempleView } from './modules/temple/TempleView';
 import { AppProvider, useApp } from './store/AppContext';
-import { CitizenScreen, CitizenTab, PlaceTypeId } from './types';
+import { CitizenScreen, CitizenTab, ComplaintCategoryId, PlaceTypeId } from './types';
 import { E_NAGARPALIKA_PORTAL_URL } from './constants';
 import { AppIssuesView } from './modules/app_issues/AppIssuesView';
 import { AboutAppView } from './modules/about_app/AboutAppView';
@@ -42,6 +42,7 @@ const CitizenShell: React.FC = () => {
   const [previousScreen, setPreviousScreen] = useState<CitizenScreen>('home');
   const [selectedComplaintId, setSelectedComplaintId] = useState<string | null>(null);
   const [nearbyCategory, setNearbyCategory] = useState<PlaceTypeId>('hospital');
+  const [reportCategory, setReportCategory] = useState<ComplaintCategoryId | undefined>(undefined);
 
   useEffect(() => {
     setScreen('home');
@@ -123,6 +124,12 @@ const CitizenShell: React.FC = () => {
     setNearbyCategory(category);
     setPreviousScreen(screen);
     setScreen('nearby');
+  };
+
+  const openReportCategory = (category?: ComplaintCategoryId) => {
+    setReportCategory(category);
+    setPreviousScreen(screen);
+    setScreen('report');
   };
 
   const openComplaint = (id: string) => {
@@ -221,15 +228,22 @@ const CitizenShell: React.FC = () => {
             onNavigate={navigate}
             onOpenComplaint={openComplaint}
             onOpenNearbyCategory={openNearbyCategory}
+            onOpenReportCategory={openReportCategory}
           />
         )}
         {screen === 'report' && (
           <ReportFlow
+            initialCategory={reportCategory}
             onSuccessViewComplaint={(id) => openComplaint(id)}
             onCancel={() => navigate('home')}
           />
         )}
-        {screen === 'services' && <ServicesHub onNavigate={navigate} />}
+        {screen === 'services' && (
+          <ServicesHub
+            onNavigate={navigate}
+            onOpenReportCategory={openReportCategory}
+          />
+        )}
         {screen === 'nearby' && <NearbyView initialCategory={nearbyCategory} />}
         {screen === 'profile' && (
           <ProfileView

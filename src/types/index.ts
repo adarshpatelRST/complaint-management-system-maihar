@@ -33,6 +33,7 @@ export type CitizenScreen =
 
 export type ComplaintCategoryId =
   | 'water'
+  | 'handpump'
   | 'streetlight'
   | 'sanitation'
   | 'roads'

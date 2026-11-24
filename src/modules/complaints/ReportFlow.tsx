@@ -13,6 +13,7 @@ import {
   Tag,
 } from 'lucide-react';
 import { CATEGORIES, WARDS } from '../../constants';
+import { PROBLEM_CATEGORIES } from '../../constants/problemCategories';
 import { PhotoPicker } from '../../components/PhotoPicker';
 import { ICON_CIRCLE_THEMES, UI } from '../../theme/tokens';
 import { useApp } from '../../store/AppContext';
@@ -23,12 +24,18 @@ import { reverseGeocode, GeocodeResult } from '../../utils/geocode';
 interface ReportFlowProps {
   onSuccessViewComplaint: (id: string) => void;
   onCancel: () => void;
+  initialCategory?: ComplaintCategoryId;
 }
 
-export const ReportFlow: React.FC<ReportFlowProps> = ({ onSuccessViewComplaint, onCancel }) => {
+export const ReportFlow: React.FC<ReportFlowProps> = ({
+  onSuccessViewComplaint,
+  onCancel,
+  initialCategory,
+}) => {
   const { citizen, language, t, createComplaint, showToast } = useApp();
   const [beforePhoto, setBeforePhoto] = useState<string | undefined>(undefined);
-  const [category, setCategory] = useState<ComplaintCategoryId | ''>('');
+  const [category, setCategory] = useState<ComplaintCategoryId | ''>(initialCategory || '');
+  const [isChangingCategory, setIsChangingCategory] = useState(!initialCategory);
   const [ward, setWard] = useState<number>(citizen.ward || 4);
   const [lat, setLat] = useState<number | undefined>(undefined);
   const [lng, setLng] = useState<number | undefined>(undefined);
@@ -43,7 +50,15 @@ export const ReportFlow: React.FC<ReportFlowProps> = ({ onSuccessViewComplaint, 
   const [isResolvingAddress, setIsResolvingAddress] = useState(false);
   const [accuracy, setAccuracy] = useState<number | undefined>(undefined);
 
+  useEffect(() => {
+    if (initialCategory) {
+      setCategory(initialCategory);
+      setIsChangingCategory(false);
+    }
+  }, [initialCategory]);
+
   const selectedCategoryObj = CATEGORIES.find((c) => c.id === category);
+  const selectedProblemConfig = PROBLEM_CATEGORIES.find((c) => c.id === category);
   const selectedWardObj = WARDS.find((w) => w.id === ward);
 
   const detectGps = () => {
@@ -231,65 +246,93 @@ export const ReportFlow: React.FC<ReportFlowProps> = ({ onSuccessViewComplaint, 
           />
         </div>
 
-        {/* Section 2: Category Selection (Dropdown) */}
+        {/* Section 2: Problem Category Selection (No Dropdown - Visual Icon Cards) */}
         <div className={`${UI.card} p-4 space-y-3`}>
-          <div className="space-y-1">
-            <label
-              htmlFor="complaint-category"
-              className="flex items-center gap-1.5 text-xs font-bold text-[var(--mnp-text)]"
-            >
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-1.5 text-xs font-bold text-[var(--mnp-text)]">
               <Tag className="w-4 h-4 text-[var(--mnp-primary)]" />
               <span>
-                {language === 'hi' ? 'शिकायत की श्रेणी (विभाग) चुनें *' : 'Select Complaint Category *'}
+                {language === 'hi' ? 'समस्या की श्रेणी *' : 'Civic Problem Category *'}
               </span>
             </label>
-            <p className={UI.mutedText}>
-              {language === 'hi'
-                ? 'संबंधित नगरपालिका शाखा में सीधे आवंटन हेतु श्रेणी चुनें'
-                : 'Select the department category for automated SLA assignment'}
-            </p>
+            {category && (
+              <button
+                type="button"
+                onClick={() => setIsChangingCategory(!isChangingCategory)}
+                className="text-xs font-bold text-[var(--mnp-primary)] hover:underline"
+              >
+                {isChangingCategory
+                  ? language === 'hi'
+                    ? 'रद्द करें'
+                    : 'Cancel'
+                  : language === 'hi'
+                    ? 'समस्या बदलें'
+                    : 'Change Problem'}
+              </button>
+            )}
           </div>
 
-          <select
-            id="complaint-category"
-            value={category}
-            onChange={(e) => {
-              setCategory((e.target.value as ComplaintCategoryId) || '');
-              setError('');
-            }}
-            className={`${UI.input} text-sm font-medium`}
-            required
-          >
-            <option value="">
-              {language === 'hi' ? '-- श्रेणी का चयन करें --' : '-- Choose a category --'}
-            </option>
-            {CATEGORIES.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {language === 'hi' ? cat.labelHi : cat.labelEn} (SLA: {cat.slaHours} {t.hoursShort})
-              </option>
-            ))}
-          </select>
-
-          {/* Department & SLA details if category is selected */}
-          {selectedCategoryObj && (
-            <div className="rounded-[10px] p-2.5 bg-[var(--mnp-surface-muted)] border border-[var(--mnp-border)] text-xs space-y-1">
-              <div className="flex items-center justify-between text-[var(--mnp-text)]">
-                <span className="flex items-center gap-1 text-[var(--mnp-text-muted)]">
-                  <Building2 className="w-3.5 h-3.5" />
-                  <span>{language === 'hi' ? 'संबंधित शाखा:' : 'Department:'}</span>
+          {/* Prominent Pre-selected Problem Card (NO dropdown) */}
+          {selectedProblemConfig && !isChangingCategory && (
+            <div className="rounded-[14px] p-3.5 bg-gradient-to-r from-[var(--mnp-surface)] to-[var(--mnp-surface-muted)] border-2 border-[var(--mnp-primary)]/40 shadow-xs flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  className={`w-12 h-12 rounded-[14px] flex items-center justify-center shrink-0 shadow-xs ${selectedProblemConfig.iconBg}`}
+                >
+                  {React.createElement(selectedProblemConfig.icon, { className: 'w-6 h-6' })}
                 </span>
-                <span className="font-bold">
-                  {language === 'hi' ? selectedCategoryObj.deptHi : selectedCategoryObj.deptEn}
-                </span>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-extrabold text-[var(--mnp-text)] truncate">
+                    {language === 'hi' ? selectedProblemConfig.labelHi : selectedProblemConfig.labelEn}
+                  </h3>
+                  <p className="text-[11px] text-[var(--mnp-text-muted)] truncate mt-0.5">
+                    {language === 'hi' ? selectedProblemConfig.deptHi : selectedProblemConfig.deptEn}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center justify-between text-[var(--mnp-text)]">
-                <span className="flex items-center gap-1 text-[var(--mnp-text-muted)]">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>{t.slaTarget}:</span>
-                </span>
-                <span className="font-bold text-[var(--mnp-primary)] tabular-nums">
-                  {selectedCategoryObj.slaHours} {t.hoursShort}
-                </span>
+              <span className="px-2.5 py-1 rounded-full bg-[var(--mnp-primary-soft)] text-[var(--mnp-primary)] text-xs font-bold shrink-0 tabular-nums">
+                {selectedProblemConfig.slaHours}h SLA
+              </span>
+            </div>
+          )}
+
+          {/* Interactive Problem Icon Cards (Shown when selecting or changing problem) */}
+          {(!category || isChangingCategory) && (
+            <div className="space-y-2 pt-1">
+              <p className="text-xs font-semibold text-[var(--mnp-text-muted)]">
+                {language === 'hi'
+                  ? 'अपनी समस्या के आइकन पर टैप करें:'
+                  : 'Tap on your problem category icon below:'}
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {PROBLEM_CATEGORIES.map((item) => {
+                  const Icon = item.icon;
+                  const isSelected = category === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setCategory(item.id);
+                        setIsChangingCategory(false);
+                        setError('');
+                      }}
+                      className={`min-h-[86px] p-2 rounded-[12px] border text-center flex flex-col items-center justify-center gap-1.5 transition-all active:scale-95 ${isSelected
+                          ? 'border-[var(--mnp-primary)] bg-[var(--mnp-primary-soft)] ring-2 ring-[var(--mnp-primary)]'
+                          : 'border-[var(--mnp-border)] bg-[var(--mnp-surface)] hover:border-[var(--mnp-primary)]'
+                        }`}
+                    >
+                      <span
+                        className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 ${item.iconBg}`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </span>
+                      <span className="text-[10.5px] font-bold text-[var(--mnp-text)] leading-tight line-clamp-2">
+                        {language === 'hi' ? item.shortLabelHi : item.shortLabelEn}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

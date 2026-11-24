@@ -147,11 +147,19 @@ export interface CategoryConfig {
 
 export const CATEGORIES: CategoryConfig[] = [
   {
+    id: 'handpump',
+    slaHours: 48,
+    labelHi: 'हैंडपंप मरम्मत',
+    labelEn: 'Handpump repair',
+    deptHi: 'जल प्रदाय एवं हैंडपंप शाखा',
+    deptEn: 'Water Works & Handpump Branch',
+  },
+  {
     id: 'water',
     slaHours: 48,
-    labelHi: 'पेयजल आपूर्ति',
-    labelEn: 'Water supply',
-    deptHi: 'जल प्रदाय विभाग',
+    labelHi: 'पेयजल आपूर्ति पाइप लाइन मरम्मत',
+    labelEn: 'Drinking water pipeline repair',
+    deptHi: 'जल प्रदाय शाखा',
     deptEn: 'Water Works Dept',
   },
   {
@@ -189,10 +197,10 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'cattle',
     slaHours: 24,
-    labelHi: 'आवारा या घायल पशु',
-    labelEn: 'Stray or injured cattle',
-    deptHi: 'पशु नियंत्रण दल',
-    deptEn: 'Cattle Control Squad',
+    labelHi: 'आवारा, घायल या मृत पशु',
+    labelEn: 'Stray, injured or dead animal',
+    deptHi: 'पशु नियंत्रण एवं स्वच्छता दल',
+    deptEn: 'Cattle Control & Sanitation Squad',
   },
   {
     id: 'other',

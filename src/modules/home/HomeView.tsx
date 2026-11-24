@@ -34,20 +34,23 @@ import { CATEGORIES, E_NAGARPALIKA_PORTAL_URL, getSlaInfo, WARDS } from '../../c
 import { StatusBadge } from '../../components/StatusBadge';
 import { ICON_CIRCLE_THEMES, UI } from '../../theme/tokens';
 import { useApp } from '../../store/AppContext';
-import { CitizenScreen, PlaceTypeId } from '../../types';
+import { CitizenScreen, ComplaintCategoryId, PlaceTypeId } from '../../types';
 import { formatDate } from '../../utils/format';
 import { SEED_ACHIEVEMENTS } from '../../data/seedData';
+import { PROBLEM_CATEGORIES } from '../../constants/problemCategories';
 
 interface HomeViewProps {
   onNavigate: (screen: CitizenScreen) => void;
   onOpenComplaint: (id: string) => void;
   onOpenNearbyCategory: (category: PlaceTypeId) => void;
+  onOpenReportCategory?: (category: ComplaintCategoryId) => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
   onNavigate,
   onOpenComplaint,
   onOpenNearbyCategory,
+  onOpenReportCategory,
 }) => {
   const { citizen, complaints, notices, language, t } = useApp();
 
@@ -55,6 +58,20 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const myActiveComplaints = complaints
     .filter((c) => c.mobile === citizen.mobile && c.status !== 'Closed')
     .slice(0, 3);
+
+  const problemTiles = PROBLEM_CATEGORIES.map((prob) => ({
+    id: `problem_${prob.id}`,
+    label: language === 'hi' ? prob.shortLabelHi : prob.shortLabelEn,
+    onClick: () => {
+      if (onOpenReportCategory) {
+        onOpenReportCategory(prob.id);
+      } else {
+        onNavigate('report');
+      }
+    },
+    icon: prob.icon,
+    iconTint: prob.iconBg,
+  }));
 
   const serviceTiles: {
     id: string;
@@ -64,13 +81,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
     icon: React.ComponentType<{ className?: string }>;
     iconTint: string;
   }[] = [
-      {
-        id: 'report',
-        label: language === 'hi' ? 'शिकायत दर्ज' : 'Report Issue',
-        screen: 'report',
-        icon: Camera,
-        iconTint: ICON_CIRCLE_THEMES.red,
-      },
+      ...problemTiles,
       {
         id: 'track',
         label: t.tileTrackComplaint,
@@ -117,14 +128,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
       },
       {
         id: 'achievements',
-        label: language === 'hi' ? 'नगर उपलब्धियां' : 'Achievements',
+        label: language === 'hi' ? 'नगर पालिका द्वारा किये गए कार्य' : 'Municipal Works',
         screen: 'achievements',
         icon: Trophy,
         iconTint: ICON_CIRCLE_THEMES.amber,
       },
       {
         id: 'news',
-        label: language === 'hi' ? 'नगर समाचार' : 'City News',
+        label: language === 'hi' ? 'नगर समाचार अपडेट' : 'News Updates',
         screen: 'news',
         icon: Newspaper,
         iconTint: ICON_CIRCLE_THEMES.blue,
@@ -142,13 +153,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
         screen: 'cityinfo',
         icon: Building2,
         iconTint: ICON_CIRCLE_THEMES.teal,
-      },
-      {
-        id: 'app_issues',
-        label: language === 'hi' ? 'ऐप समस्याएं' : 'App Issues',
-        screen: 'app_issues',
-        icon: Wrench,
-        iconTint: ICON_CIRCLE_THEMES.indigo,
       },
       {
         id: 'about_app',
@@ -313,10 +317,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       onNavigate(tile.screen);
                     }
                   }}
-                  className="min-h-[96px] rounded-[14px] bg-white dark:bg-[#16202C] p-2.5 shadow-sm flex flex-col items-center justify-center gap-2 text-center active:scale-[0.97] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  className="min-h-[96px] rounded-[14px] bg-white dark:bg-[#16202C] p-2.5 shadow-sm flex flex-col items-center justify-center gap-1.5 text-center active:scale-[0.97] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
                   <span
-                    className={`w-11 h-11 rounded-[12px] flex items-center justify-center shrink-0 ${tile.iconTint}`}
+                    className={`w-11 h-11 rounded-[12px] flex items-center justify-center shrink-0 shadow-xs ${tile.iconTint}`}
                   >
                     <Icon className="w-5 h-5" />
                   </span>

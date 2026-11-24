@@ -66,7 +66,7 @@ export const NewsView: React.FC = () => {
     const title = isHi ? item.titleHi : item.titleEn;
     const summary = isHi ? item.summaryHi : item.summaryEn;
     const dept = isHi ? item.sourceDeptHi : item.sourceDeptEn;
-    const shareText = `🏛️ *मैहर नगर पालिका समाचार*\n📰 *${title}*\n\n${summary}\n\n📍 स्रोत: ${dept}\n📲 मैहर नगर पालिका सेवा ऐप`;
+    const shareText = `🏛️ *मैहर नगर पालिका समाचार अपडेट*\n📰 *${title}*\n\n${summary}\n\n📍 स्रोत: ${dept}\n📲 मैहर नगर पालिका सेवा ऐप`;
 
     if (navigator.share) {
       try {
